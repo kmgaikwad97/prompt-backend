@@ -1,8 +1,20 @@
 {
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/"
-        }
-    ]
-}
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/src/app.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/src/app.js"
+      }
+    ],
+    "build": {
+      "env": {
+        "CORS_ORIGIN": "https://your-frontend-domain.com", 
+        "GROQ_API_KEY": "@groq_api_key", 
+        "OTHER_ENV_VARS": "@other_env_vars" 
+      }
+    }
+  }
