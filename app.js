@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const connectDb = require("./config/database"); // Moved to the top for clarity
+const connectDb = require("./src/config/database"); // Moved to the top for clarity
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use(
 app.use(express.json());
 
 // User Routes
-const userRouter = require("../src/routes/user");
+const userRouter = require("./src/routes/user");
 app.use("/api/v1/", userRouter);
 
 // Health Check Route
