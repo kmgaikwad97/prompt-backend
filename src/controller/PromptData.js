@@ -1,7 +1,6 @@
 const Message = require("../models/messageSchema");
 const Chat = require("../models/chatSchema");
 const Groq = require('groq-sdk')
-const nodeMailer = require('nodemailer');
 
 // Initialize Groq SDK using the API key from environment variables
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });

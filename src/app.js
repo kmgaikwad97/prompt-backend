@@ -1,33 +1,42 @@
 const express = require("express");
-var cors = require("cors");
-const PORT = process.env.PORT || 3000
-const dotenv = require('dotenv')
-dotenv.config()
-const connectDb = require("./config/database");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const connectDb = require("./config/database"); // Moved to the top for clarity
+
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+
 const app = express();
+
+// CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN, // Ensure this variable is set in your .env file
     credentials: true,
   })
 );
-app.get("/",(req,res)=>{
-  res.send("Hello Prompt App")
-})
-
-const userRouter = require("../src/routes/user");
 
 app.use(express.json());
 
+// User Routes
+const userRouter = require("../src/routes/user");
 app.use("/api/v1/", userRouter);
 
+// Health Check Route
+app.get("/", (req, res) => {
+  res.send("Hello Prompt App");
+});
+
+// Database Connection and Server Startup
 connectDb()
   .then(() => {
-    console.log("db connected");
+    console.log("DB connected");
     app.listen(PORT, () => {
-      console.log(`connected to the ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.log(err.message, "error in db connection");
+    console.error("Error in DB connection:", err.message);
+    process.exit(1); // Optional: Exit the process on database connection failure
   });
