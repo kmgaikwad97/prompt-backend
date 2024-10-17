@@ -9,12 +9,5 @@
         "src": "/(.*)",
         "dest": "/src/app.js"
       }
-    ],
-    "build": {
-      "env": {
-        "CORS_ORIGIN": "https://your-frontend-domain.com", 
-        "GROQ_API_KEY": "@groq_api_key", 
-        "OTHER_ENV_VARS": "@other_env_vars" 
-      }
-    }
+    ]
   }
