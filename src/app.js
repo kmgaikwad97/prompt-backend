@@ -11,6 +11,9 @@ app.use(
     credentials: true,
   })
 );
+app.get("/",(req,res)=>{
+  res.send("Hello Prompt App")
+})
 
 const userRouter = require("../src/routes/user");
 
