@@ -20,7 +20,7 @@ app.use(
 app.use(express.json());
 
 // User Routes
-const userRouter = require("./src/routes/user");
+const userRouter = require("./src/routes/routes");
 app.use("/api/v1/", userRouter);
 
 // Health Check Route
