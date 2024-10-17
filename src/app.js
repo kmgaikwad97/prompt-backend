@@ -25,7 +25,7 @@ connectDb()
   .then(() => {
     console.log("db connected");
     app.listen(PORT, () => {
-      console.log("server is listening on 3000");
+      console.log(`connected to the ${PORT}`);
     });
   })
   .catch((err) => {
