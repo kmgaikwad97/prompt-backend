@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const connectDb = require("./src/config/database"); // Moved to the top for clarity
+const connectDb = require("./src/config/database"); 
 console.log("hello world")
 dotenv.config();
 
@@ -9,13 +9,13 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-// CORS Configuration
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN, // Ensure this variable is set in your .env file
-    credentials: true,
-  })
-);
+app.use(cors())
+// CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+};
 
 app.use(express.json());
 
@@ -38,5 +38,5 @@ connectDb()
   })
   .catch((err) => {
     console.error("Error in DB connection:", err.message);
-    process.exit(1); // Optional: Exit the process on database connection failure
+    process.exit(1); 
   });
