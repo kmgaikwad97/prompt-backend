@@ -19,23 +19,32 @@ const giveMePromptData = async (req, res) => {
             model: 'llama3-8b-8192',
         });
 
-        // Extract AI's response from the API
+
         const aiResponse = chatCompletion.choices[0]?.message?.content || 'No response from AI';
 
-        // Save user message and AI response
-        const userMsg = await Message.create({ role: 'user', content: userMessage });
-        const aiMsg = await Message.create({ role: 'assistant', content: aiResponse });
 
-        // Create a new chat record
-        const newChat = await Chat.create({
-            email: email, 
-            messages: [userMsg._id, aiMsg._id],
+        // // Save user message and AI response
+        // const userMsg = await Message.create({ role: 'user', content: userMessage });
+        // const aiMsg = await Message.create({ role: 'assistant', content: aiResponse });
+
+        const message = await Message.create({
+            role: 'user', // Optional
+            content: userMessage,
+            response: aiResponse,
         });
 
+
+        const newChat = await Chat.create({
+            email: email,
+            messages: [message._id],
+        });
+
+
         res.status(200).json({
-            userMessage: userMsg.content,
-            aiResponse: aiMsg.content,
-            chatId: newChat._id  
+            userMessage: message.content,
+            aiResponse: message.response,
+            chatId: newChat._id,
+            email: newChat.email
         });
 
     } catch (error) {
@@ -44,3 +53,7 @@ const giveMePromptData = async (req, res) => {
     }
 }
 module.exports = { giveMePromptData }
+
+
+
+/* 1 createdAt:28/10/2024, 14:38:59*/

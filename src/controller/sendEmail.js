@@ -3,6 +3,7 @@ const Chat = require("../models/chatSchema");
 const nodeMailer = require('nodemailer');
 
 const sendEmail = async (req, res) => {
+
     const { email, chatId } = req.body;
 
     if (!email || !chatId) {
@@ -10,20 +11,22 @@ const sendEmail = async (req, res) => {
     }
 
     try {
+        const chat = await Chat.findById(chatId).populate({
+            path: 'messages',
+            model: Message, 
+            select: 'role content response createdAt'
+        });
 
-        const chat = await Chat.findById(chatId).populate('messages');
 
         if (!chat) {
             return res.status(404).json({ error: 'Chat not found' });
         }
 
-
-        const aiResponse = chat.messages.find(msg => msg.role === 'assistant')?.content;
+        const aiResponse = chat.messages.find(msg => msg.response)?.response;
 
         if (!aiResponse) {
             return res.status(404).json({ error: 'AI response not found' });
         }
-
 
         const mailOptions = {
             from: process.env.SMPT_MAIL,
@@ -31,7 +34,6 @@ const sendEmail = async (req, res) => {
             subject: 'Your AI-Generated Greeting',
             text: `AI's Response: ${aiResponse}`,
         };
-
 
         const transporter = nodeMailer.createTransport({
             host: process.env.SMPT_HOST,
@@ -52,7 +54,6 @@ const sendEmail = async (req, res) => {
                 return res.status(201).json({
                     email,
                     aiResponse,
-                    messageId: info.messageId,  // Optional: Return email info
                 });
             }
         });
